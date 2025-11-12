@@ -448,3 +448,78 @@ body {
   }
 }
 
+/* Improved mobile responsiveness for small phones */
+@media (max-width: 420px) {
+  .page {
+    padding: 2rem 0.8rem 4rem;
+  }
+
+  .scene {
+    width: 94vw;
+    height: auto;
+    aspect-ratio: 10 / 8;
+    max-height: 68vh;
+  }
+
+  .envelope {
+    width: 92vw;
+    height: auto;
+    max-height: 62vh;
+  }
+
+  .letter {
+    inset: 6% 6%;
+    padding: 1rem 1rem;
+    border-radius: 14px;
+    max-height: 62vh;
+  }
+
+  .letter__inner {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .letter__text {
+    font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+  }
+
+  .letter__pen {
+    width: 22px;
+    height: 120px;
+    transform: translate3d(0, 0, 40px) rotate(-6deg);
+  }
+
+  .sparkles {
+    display: none; /* hide decorative sparkles to reduce clutter on small screens */
+  }
+
+  .story {
+    padding: 2rem 1rem;
+    margin-top: 3.5rem;
+  }
+
+  .story__content h2 {
+    font-size: 1.6rem;
+  }
+
+  .story__content p {
+    font-size: 1rem;
+  }
+}
+
+/* Extra adjustments for very narrow devices */
+@media (max-width: 360px) {
+  .page {
+    padding: 1.6rem 0.6rem 3rem;
+  }
+
+  .letter__inner {
+    font-size: 0.92rem;
+  }
+
+  .envelope__seal {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+  }
+}
+
