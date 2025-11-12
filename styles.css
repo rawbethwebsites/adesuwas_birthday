@@ -463,21 +463,26 @@ body {
   .scene {
     width: 94vw;
     height: auto;
-    aspect-ratio: 10 / 8;
-    max-height: 68vh;
+    max-height: 80vh;
   }
 
   .envelope {
     width: 92vw;
     height: auto;
-    max-height: 62vh;
   }
 
   .letter {
     inset: 6% 6%;
     padding: 1rem 1rem;
     border-radius: 14px;
-    max-height: 62vh;
+    max-height: 70vh;
+  }
+
+  /* Ensure letter is visible and expanded when opened on mobile */
+  .envelope--opened .letter {
+    max-height: 85vh;
+    inset: 4% 4%;
+    padding: 1rem 0.8rem;
   }
 
   .letter__inner {
