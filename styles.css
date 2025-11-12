@@ -49,11 +49,11 @@ body {
 }
 
 .page {
-  min-height: 100vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 4rem 1.5rem 7rem;
   position: relative;
 }
@@ -446,7 +446,14 @@ body {
 
 @media (max-width: 600px) {
   .page {
-    padding-top: 3rem;
+    padding-top: 2rem;
+    min-height: auto;
+    justify-content: flex-start;
+  }
+
+  .hero {
+    min-height: auto;
+    margin-bottom: 2rem;
   }
 
   .hero__hint {
