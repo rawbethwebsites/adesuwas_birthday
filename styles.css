@@ -227,7 +227,8 @@ body {
   backface-visibility: hidden;
   opacity: 0;
   pointer-events: auto;
-  max-height: clamp(360px, 72vh, 620px);
+  /* make the paper taller on most screens so more text fits without scrolling */
+  max-height: clamp(520px, 88vh, 1000px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(106, 76, 121, 0.4) rgba(255, 250, 241, 0.7);

@@ -17,6 +17,8 @@ let isOpened = false;
 let isAnimating = false;
 let writingTimeline = null;
 let floatTween = null;
+// Toggle the subtle paper float animation. Set to false to keep the paper static.
+const ENABLE_PAPER_FLOAT = false;
 const defaultHintText = hint ? hint.textContent : "";
 
 function resetLetterContent() {
@@ -51,15 +53,20 @@ function setupInitialStates() {
   if (floatTween) {
     floatTween.pause(0);
   } else {
-    floatTween = gsap.to(letter, {
-      yPercent: -6,
-      rotationX: 3,
-      duration: 2.4,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      paused: true,
-    });
+    if (ENABLE_PAPER_FLOAT) {
+      floatTween = gsap.to(letter, {
+        yPercent: -6,
+        rotationX: 3,
+        duration: 2.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        paused: true,
+      });
+    } else {
+      // safe no-op object so calls to play/pause won't throw
+      floatTween = { play: function () {}, pause: function () {} };
+    }
   }
 }
 
