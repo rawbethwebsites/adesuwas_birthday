@@ -234,6 +234,11 @@ body {
   scrollbar-color: rgba(106, 76, 121, 0.4) rgba(255, 250, 241, 0.7);
 }
 
+/* When the envelope is opened, allow the letter to expand further so more lines are visible */
+.envelope--opened .letter {
+  max-height: 92vh;
+  padding: clamp(1.6rem, 3.6vw, 2.4rem);
+}
 .letter::before {
   content: "";
   position: absolute;

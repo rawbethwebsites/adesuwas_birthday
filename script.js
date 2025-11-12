@@ -116,18 +116,19 @@ function startWritingSequence() {
     },
   });
 
-  // Word timing controls: reduce WORD_SECONDS to speed up, increase to slow down.
-  // Set to ~0.35s per word for a noticeably faster but still readable pace.
-  const WORD_SECONDS = 0.35; // seconds per word (faster)
-  const LINE_PAUSE = 0.18; // shorter pause after each line
+  // Character timing controls: change to letter-by-letter reveal.
+  // CHAR_SECONDS controls seconds per character (smaller = faster). Adjust as needed.
+  const CHAR_SECONDS = 0.04; // ~40ms per character
+  const LINE_PAUSE = 0.12; // short pause after each line
 
   letterLines.forEach((line, index) => {
     const text = line.dataset.text || "";
     const textTarget = line.querySelector(".letter__text") || line;
     const sparkle = line.querySelector(".letter__sparkle");
-    const wordCount = Math.max(text.trim().split(/\s+/).filter(Boolean).length, 1);
-  // duration scales with word count. clamp min/max keeps very short/long lines reasonable
-  const duration = gsap.utils.clamp(1.0, 12, wordCount * WORD_SECONDS);
+  // compute character count (including spaces) for letter-by-letter timing
+  const charCount = Math.max((text || "").length, 1);
+  // duration scales with characters
+  const duration = gsap.utils.clamp(0.6, 24, charCount * CHAR_SECONDS);
 
     // slightly bigger initial gap so the envelope reveal finishes before writing begins
     writingTimeline.add(() => {
@@ -152,13 +153,13 @@ function startWritingSequence() {
       }
   }, index === 0 ? ">0.5" : ">0.35");
 
-    // Animate text word-by-word (TextPlugin with delimiter: ' ')
+    // Animate text letter-by-letter (TextPlugin with no delimiter or empty string)
     writingTimeline.to(
       textTarget,
       {
         text: {
           value: text,
-          delimiter: " ",
+          delimiter: "",
         },
         duration,
         ease: "none",
