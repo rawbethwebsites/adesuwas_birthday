@@ -500,7 +500,7 @@ body {
 
   .letter {
     transform: translateZ(0px) rotateX(0deg) !important;
-    max-height: 60vh !important;
+    max-height: 50vh !important;
     inset: 8% 8% !important;
     padding: 0.8rem !important;
     opacity: 0 !important;
@@ -510,7 +510,7 @@ body {
   .envelope--opened .letter {
     opacity: 1 !important;
     transform: none !important;
-    max-height: 75vh !important;
+    max-height: 55vh !important;
     inset: 5% 5% !important;
   }
 
