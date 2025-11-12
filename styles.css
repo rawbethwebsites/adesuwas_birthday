@@ -464,32 +464,46 @@ body {
 /* Improved mobile responsiveness for small phones */
 @media (max-width: 420px) {
   .page {
-    padding: 2rem 0.8rem 4rem;
+    padding: 1.5rem 0.8rem 2rem !important;
+    min-height: auto !important;
+  }
+
+  .hero {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 1.5rem;
   }
 
   .scene {
-    width: 94vw;
-    height: auto;
-    max-height: 80vh;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 90vh !important;
+    min-height: 250px;
+    display: grid !important;
+    place-items: center !important;
   }
 
   .envelope {
-    width: 92vw;
-    height: auto;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 95vw;
+    max-height: 75vh !important;
+    display: block !important;
   }
 
   .letter {
-    inset: 6% 6%;
-    padding: 1rem 1rem;
+    inset: 6% 6% !important;
+    padding: 1rem 1rem !important;
     border-radius: 14px;
-    max-height: 70vh;
+    max-height: 70vh !important;
+    display: block !important;
   }
 
   /* Ensure letter is visible and expanded when opened on mobile */
   .envelope--opened .letter {
-    max-height: 85vh;
-    inset: 4% 4%;
-    padding: 1rem 0.8rem;
+    max-height: 85vh !important;
+    inset: 4% 4% !important;
+    padding: 1rem 0.8rem !important;
   }
 
   .letter__inner {
@@ -513,7 +527,7 @@ body {
 
   .story {
     padding: 2rem 1rem;
-    margin-top: 3.5rem;
+    margin-top: 2rem;
   }
 
   .story__content h2 {
