@@ -528,16 +528,20 @@ body {
   }
 
   .story {
-    padding: 1.5rem 1rem;
-    margin-top: 1.5rem;
+    /* Reduce padding and top margin on very small screens so the content is closer to the envelope */
+    padding: 1rem 0.8rem;
+    margin-top: 0.75rem;
   }
 
   .story__content h2 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
   }
 
   .story__content p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
   }
 
   .page {
