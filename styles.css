@@ -446,14 +446,15 @@ body {
 
 @media (max-width: 600px) {
   .page {
-    padding-top: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
     min-height: auto;
     justify-content: flex-start;
   }
 
   .hero {
     min-height: auto;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
   }
 
   .hero__hint {
@@ -467,6 +468,8 @@ body {
   .scene {
     perspective: none !important;
     transform-style: flat !important;
+    width: 100% !important;
+    place-items: center !important;
   }
 
   .envelope {
@@ -476,6 +479,7 @@ body {
     position: relative !important;
     pointer-events: auto !important;
     cursor: pointer !important;
+    margin: 0 auto !important;
   }
 
   .envelope__shadow {
