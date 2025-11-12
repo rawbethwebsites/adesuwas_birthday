@@ -10,6 +10,8 @@ const seal = document.querySelector(".envelope__seal");
 const hint = document.querySelector(".hero__hint");
 const pen = document.getElementById("letter-pen");
 const penSparkle = document.getElementById("letter-pen-sparkle");
+// Toggle pen/visual writing cue. Set to false to remove the pen if it can't be synced.
+const SHOW_PEN = false;
 
 let isOpened = false;
 let isAnimating = false;
@@ -103,7 +105,7 @@ function startWritingSequence() {
     defaults: { ease: "none" },
     onComplete: () => {
       floatTween.play();
-      gsap.to([pen, penSparkle], { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
+      if (SHOW_PEN) gsap.to([pen, penSparkle], { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
     },
   });
 
@@ -128,8 +130,10 @@ function startWritingSequence() {
 
       gsap.set(line, { opacity: 1 });
       if (textTarget) textTarget.textContent = "";
-      gsap.set(pen, { x: startX, y: baseline, rotate: -14, autoAlpha: 1 });
-      gsap.set(penSparkle, { x: startX, y: baseline, autoAlpha: 1, scale: 0.6 });
+      if (SHOW_PEN) {
+        gsap.set(pen, { x: startX, y: baseline, rotate: -14, autoAlpha: 1 });
+        gsap.set(penSparkle, { x: startX, y: baseline, autoAlpha: 1, scale: 0.6 });
+      }
       if (sparkle) {
         gsap.set(sparkle, { autoAlpha: 0, scale: 0.7 });
       }
@@ -155,53 +159,55 @@ function startWritingSequence() {
       "<"
     );
 
-    // Move pen and sparkle across the line in sync with words
-    writingTimeline.to(
-      pen,
-      {
-        x: () => {
-          const lineRect = line.getBoundingClientRect();
-          return lineRect.left - envelopeRect.left + Math.max(lineRect.width * 0.96, 48);
+    // Optionally move pen and sparkle across the line in sync with words
+    if (SHOW_PEN) {
+      writingTimeline.to(
+        pen,
+        {
+          x: () => {
+            const lineRect = line.getBoundingClientRect();
+            return lineRect.left - envelopeRect.left + Math.max(lineRect.width * 0.96, 48);
+          },
+          y: () => {
+            const lineRect = line.getBoundingClientRect();
+            return lineRect.top - envelopeRect.top + lineRect.height * 0.62;
+          },
+          duration,
+          ease: "none",
         },
-        y: () => {
-          const lineRect = line.getBoundingClientRect();
-          return lineRect.top - envelopeRect.top + lineRect.height * 0.62;
-        },
-        duration,
-        ease: "none",
-      },
-      "<"
-    );
+        "<"
+      );
 
-    writingTimeline.to(
-      penSparkle,
-      {
-        x: () => {
-          const lineRect = line.getBoundingClientRect();
-          return lineRect.left - envelopeRect.left + Math.max(lineRect.width * 0.96, 48);
+      writingTimeline.to(
+        penSparkle,
+        {
+          x: () => {
+            const lineRect = line.getBoundingClientRect();
+            return lineRect.left - envelopeRect.left + Math.max(lineRect.width * 0.96, 48);
+          },
+          y: () => {
+            const lineRect = line.getBoundingClientRect();
+            return lineRect.top - envelopeRect.top + lineRect.height * 0.62;
+          },
+          scale: 1.05,
+          duration,
+          ease: "sine.out",
         },
-        y: () => {
-          const lineRect = line.getBoundingClientRect();
-          return lineRect.top - envelopeRect.top + lineRect.height * 0.62;
-        },
-        scale: 1.05,
-        duration,
-        ease: "sine.out",
-      },
-      "<"
-    );
+        "<"
+      );
 
-    writingTimeline.to(
-      penSparkle,
-      {
-        autoAlpha: 0.25,
-        duration: Math.max(0.4, duration * 0.5),
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: 1,
-      },
-      "<"
-    );
+      writingTimeline.to(
+        penSparkle,
+        {
+          autoAlpha: 0.25,
+          duration: Math.max(0.4, duration * 0.5),
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: 1,
+        },
+        "<"
+      );
+    }
 
     if (sparkle) {
       writingTimeline.fromTo(
