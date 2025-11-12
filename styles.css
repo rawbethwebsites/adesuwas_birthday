@@ -463,36 +463,54 @@ body {
 
 /* Improved mobile responsiveness for small phones */
 @media (max-width: 600px) {
+  /* Reset 3D transforms that hide the envelope on mobile */
   .scene {
-    width: 100vw !important;
-    height: 50vh !important;
-    max-height: 60vh !important;
-    min-height: 320px !important;
-    display: grid !important;
-    place-items: center !important;
-    perspective: 1000px !important;
+    perspective: none !important;
+    transform-style: flat !important;
   }
 
   .envelope {
-    width: 90vw !important;
-    height: auto !important;
-    max-height: 55vh !important;
-    transform-style: preserve-3d !important;
+    width: 85vw !important;
+    height: 45vh !important;
+    transform-style: flat !important;
+    position: relative !important;
+  }
+
+  .envelope__shadow {
+    display: none !important;
+  }
+
+  .envelope__back {
+    transform: none !important;
+  }
+
+  .envelope__front {
+    transform: none !important;
+  }
+
+  .envelope__flap {
+    transform: rotateX(0deg) translateZ(0px) !important;
   }
 
   .letter {
-    max-height: 65vh !important;
-    padding: 1rem !important;
+    transform: translateZ(0px) rotateX(0deg) !important;
+    max-height: 60vh !important;
+    inset: 8% 8% !important;
+    padding: 0.8rem !important;
+    opacity: 0 !important;
+    pointer-events: auto !important;
   }
 
   .envelope--opened .letter {
-    max-height: 80vh !important;
+    opacity: 1 !important;
+    transform: none !important;
+    max-height: 75vh !important;
     inset: 5% 5% !important;
   }
 
   .letter__inner {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .letter__pen {
@@ -509,25 +527,27 @@ body {
   }
 
   .story__content h2 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .story__content p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .page {
-    padding: 1rem 0 2rem 0 !important;
+    padding: 1rem 0 1.5rem 0 !important;
     min-height: auto !important;
+    justify-content: flex-start !important;
   }
 
   .hero {
     width: 100% !important;
     gap: 0.5rem !important;
+    margin-bottom: 1rem;
   }
 
   .hero__hint {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 }
 
