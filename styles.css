@@ -462,72 +462,50 @@ body {
 }
 
 /* Improved mobile responsiveness for small phones */
-@media (max-width: 420px) {
-  .page {
-    padding: 1.5rem 0.8rem 2rem !important;
-    min-height: auto !important;
-  }
-
-  .hero {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: 1.5rem;
-  }
-
+@media (max-width: 600px) {
   .scene {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 90vh !important;
-    min-height: 250px;
+    width: 100vw !important;
+    height: 50vh !important;
+    max-height: 60vh !important;
+    min-height: 320px !important;
     display: grid !important;
     place-items: center !important;
+    perspective: 1000px !important;
   }
 
   .envelope {
-    width: 100% !important;
+    width: 90vw !important;
     height: auto !important;
-    max-width: 95vw;
-    max-height: 75vh !important;
-    display: block !important;
+    max-height: 55vh !important;
+    transform-style: preserve-3d !important;
   }
 
   .letter {
-    inset: 6% 6% !important;
-    padding: 1rem 1rem !important;
-    border-radius: 14px;
-    max-height: 70vh !important;
-    display: block !important;
+    max-height: 65vh !important;
+    padding: 1rem !important;
   }
 
-  /* Ensure letter is visible and expanded when opened on mobile */
   .envelope--opened .letter {
-    max-height: 85vh !important;
-    inset: 4% 4% !important;
-    padding: 1rem 0.8rem !important;
+    max-height: 80vh !important;
+    inset: 5% 5% !important;
   }
 
   .letter__inner {
-    font-size: 0.96rem;
+    font-size: 0.95rem;
     line-height: 1.6;
   }
 
-  .letter__text {
-    font-size: clamp(1.05rem, 3.6vw, 1.25rem);
-  }
-
   .letter__pen {
-    width: 22px;
-    height: 120px;
-    transform: translate3d(0, 0, 40px) rotate(-6deg);
+    display: none !important;
   }
 
   .sparkles {
-    display: none; /* hide decorative sparkles to reduce clutter on small screens */
+    display: none !important;
   }
 
   .story {
-    padding: 2rem 1rem;
-    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+    margin-top: 1.5rem;
   }
 
   .story__content h2 {
@@ -535,7 +513,21 @@ body {
   }
 
   .story__content p {
-    font-size: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .page {
+    padding: 1rem 0 2rem 0 !important;
+    min-height: auto !important;
+  }
+
+  .hero {
+    width: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .hero__hint {
+    font-size: 0.75rem;
   }
 }
 
