@@ -393,8 +393,20 @@ envelope.addEventListener("pointerup", (event) => {
   toggleEnvelope();
 });
 
+envelope.addEventListener("click", (event) => {
+  if (event.target.closest(".letter") && isOpened) {
+    return;
+  }
+  toggleEnvelope();
+});
+
 if (seal) {
   seal.addEventListener("pointerup", (event) => {
+    event.stopPropagation();
+    toggleEnvelope();
+  });
+  
+  seal.addEventListener("click", (event) => {
     event.stopPropagation();
     toggleEnvelope();
   });
