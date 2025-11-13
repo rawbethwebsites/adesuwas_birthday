@@ -1,0 +1,201 @@
+/* Basic mobile-friendly styles for the Calendar component */
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3a2140;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.5px;
+}
+
+.sub {
+  margin: 6px 0 0 0;
+  color: #6c4b66;
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  background: linear-gradient(180deg, #fff, #fffaf8);
+  border-radius: 12px;
+  border: 1px solid rgba(58,33,64,0.06);
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(58,33,64,0.07);
+}
+
+.today {
+  box-shadow: 0 8px 24px rgba(249,164,200,0.12);
+  border: 1px solid rgba(249,164,200,0.28);
+}
+
+.cardInner {
+  text-align: center;
+}
+
+.day {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: #7a5a73;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 6, 10, 0.45);
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal {
+  width: min(560px, 96%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(10,6,10,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.closeBtn {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #7a5a73;
+}
+
+.modalContent {
+  padding: 20px;
+  text-align: center;
+}
+
+.modalTitle {
+  margin: 8px 0 16px 0;
+  font-size: 1.25rem;
+  color: #3a2140;
+}
+
+.envelopeWrap {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 24px 8px 32px 8px;
+}
+
+.envelope {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 22px;
+  background: linear-gradient(180deg,#fff6f8,#fff1f5);
+  border-radius: 12px;
+  border: 1px solid rgba(58,33,64,0.05);
+  min-width: 160px;
+  min-height: 110px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 200ms cubic-bezier(.2,.9,.3,1);
+}
+
+.envelope:active {
+  transform: translateY(4px) scale(0.99);
+}
+
+.envelopeEmoji {
+  font-size: 42px;
+  display:block;
+  animation: float 2.4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) }
+  50% { transform: translateY(-8px) }
+  100% { transform: translateY(0) }
+}
+
+.envelopeHint {
+  font-size: 0.95rem;
+  color: #6c4b66;
+}
+
+.letterBox {
+  padding: 14px 18px 22px 18px;
+}
+
+.letterText {
+  white-space: pre-wrap;
+  text-align: left;
+  color: #3a2140;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background: #fffaf6;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid rgba(58,33,64,0.03);
+  min-height: 120px;
+}
+
+.letterActions {
+  display:flex;
+  justify-content:center;
+  margin-top: 12px;
+}
+
+.closePrimary {
+  background: linear-gradient(180deg,#ffdfe9,#ffcee4);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #3a2140;
+  font-weight: 600;
+}
+
