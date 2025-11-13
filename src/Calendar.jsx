@@ -4,33 +4,59 @@ import styles from "./Calendar.module.css";
 // Calendar component: shows remaining dates in November starting from today.
 // Clicking a date opens a modal with an envelope; clicking the envelope reveals the letter.
 export default function Calendar() {
-  const today = useMemo(() => new Date(), []);
-  const year = today.getFullYear();
-  const novemberMonth = 10; // zero-based month index (0=Jan), 10 = November
+  // Fixed range: November 12 - November 30, 2025
+  const year = 2025;
+  const novemberMonth = 10; // November (0-based index)
+  const startDay = 12;
 
-  // Determine start day: if we're already in November, start from today; otherwise start from 1
-  const startDay = useMemo(() => {
-    return today.getMonth() === novemberMonth ? today.getDate() : 1;
-  }, [today]);
-
-  // Generate days from startDay up to Nov 30
+  // Generate days 12..30 for November 2025
   const days = useMemo(() => {
     const list = [];
     for (let d = startDay; d <= 30; d++) {
       list.push(new Date(year, novemberMonth, d));
     }
     return list;
-  }, [startDay, year]);
+  }, []);
 
-  // Placeholder messages for each date (index by day number)
+  // Messages map: Nov 12 uses the original homepage message; others are placeholders
   const messages = useMemo(() => {
     const map = {};
-    days.forEach((dt) => {
-      const day = dt.getDate();
-      map[day] = `This is your day ${day} letter!\n\n(Placeholder message — replace with a real message for ${day}.)`;
-    });
+
+    // Original homepage message (concatenated paragraphs)
+    map[12] = `Picture a quiet garden just after dawn, when the world is peaceful and each flower slowly opens to meet the sunlight.
+
+That’s how these last few weeks with you have felt—calm, full of promise, and touched by gentle wonder.
+
+Every time I get to hear your voice or see your smile, it feels like finding a new blossom, something delicate and beautiful I want to protect and cherish.
+
+It’s been just a short while since our story began, yet I already look forward to each new moment with you.
+
+In so little time you’ve brought a warm, gentle happiness into my life—a sense of excitement about tomorrow and an appreciation for the little joys in every day.
+
+I wonder if you see how much light you bring, not only to my days, but to the way I see the world. You make everything seem brighter just by being you.
+
+On your birthday, I hope you feel surrounded by love—the quiet love that comes from someone who truly admires and cares for you.
+
+I wish you a year filled with new adventures that make you laugh out loud and gentle surprises that remind you how wonderful life can be.
+
+May you find peace in unexpected places, and may your biggest dreams start to take shape before your eyes.
+
+As you step into this new chapter, know that I’m grateful for every page we’ve shared and excited to see where our story leads next.
+
+No matter what this year brings, I hope we can walk through it together, making memories and creating happiness in our own special way.
+
+Happy birthday, Adesuwa. I’m lucky to know you, and I wish you nothing but the sweetest things ahead.
+
+With all my love,
+Robert`;
+
+    // Placeholders for other dates
+    for (let d = startDay; d <= 30; d++) {
+      if (!map[d]) map[d] = `This is your November ${d} letter!`;
+    }
+
     return map;
-  }, [days]);
+  }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null); // Date object
