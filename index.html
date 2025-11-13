@@ -130,61 +130,7 @@
     }
     </script>
 
-    <!-- Vanilla fallback: intercept static date links and show envelope modal using embedded messages (works offline) -->
-    <script>
-    (function(){
-      function $(sel, root=document){ return root.querySelector(sel); }
-      function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-
-      const embedded = document.getElementById('embedded-messages');
-      let messages = {};
-      try{ messages = embedded ? JSON.parse(embedded.textContent) : {}; }catch(e){ messages = {}; }
-
-      document.addEventListener('click', function(e){
-        // only handle clicks on the static cards (anchors inside #calendar-root)
-        const a = e.target.closest && e.target.closest('#calendar-root .grid a.card');
-        if(!a) return;
-        e.preventDefault();
-        const dayEl = a.querySelector('.day');
-        const day = dayEl ? dayEl.textContent.trim() : (a.getAttribute('href')||'').match(/day(\d+)/)?.[1];
-        if(!day) return;
-        openVanillaModal(day);
-      });
-
-      function openVanillaModal(day){
-        // create overlay if missing
-        let overlay = document.querySelector('.vanilla-modal-overlay');
-        if(!overlay){
-          overlay = document.createElement('div');
-          overlay.className = 'modalOverlay vanilla-modal-overlay';
-          overlay.innerHTML = `
-            <div class="modal">
-              <button class="closeBtn" aria-label="Close">×</button>
-              <div class="modalContent">
-                <h2 class="modalTitle"></h2>
-                <div class="envelopeWrap">
-                  <div class="envelope" role="button" tabindex="0">
-                    <span class="envelopeEmoji" aria-hidden>✉️</span>
-                    <div class="envelopeHint">Tap to open</div>
-                    <div class="letterBox"><div class="letterText"></div><div class="letterActions"><button class="closePrimary">Close</button></div></div>
-                  </div>
-                </div>
-              </div>
-            </div>`;
-          document.body.appendChild(overlay);
-          overlay.querySelector('.closeBtn').addEventListener('click', ()=> overlay.remove());
-          overlay.querySelector('.closePrimary').addEventListener('click', ()=> overlay.remove());
-          const envelope = overlay.querySelector('.envelope');
-          envelope.addEventListener('click', ()=> envelope.classList.toggle('open'));
-          envelope.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter') envelope.classList.toggle('open'); });
-        }
-        overlay.querySelector('.modalTitle').textContent = `November ${day}`;
-        const letterText = overlay.querySelector('.letterText');
-        letterText.innerHTML = messages[day] || '<p>Sorry, could not load the letter.</p>';
-        overlay.querySelector('.envelope').classList.remove('open');
-      }
-    })();
-    </script>
+    <!-- (Removed duplicate vanilla handler — modal creation now handled by the unified fallback below which uses embedded messages when offline and fetch when online) -->
 
     <!-- React demo removed — page now uses lightweight GSAP + vanilla JS for modal/envelope behavior -->
 
