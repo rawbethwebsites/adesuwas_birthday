@@ -18,53 +18,38 @@ export default function Calendar() {
     return list;
   }, []);
 
-  // Messages map: Nov 12 uses the original homepage message; others are placeholders
-  const messages = useMemo(() => {
-    const map = {};
-
-    // Original homepage message (concatenated paragraphs)
-    map[12] = `Picture a quiet garden just after dawn, when the world is peaceful and each flower slowly opens to meet the sunlight.
-
-That’s how these last few weeks with you have felt—calm, full of promise, and touched by gentle wonder.
-
-Every time I get to hear your voice or see your smile, it feels like finding a new blossom, something delicate and beautiful I want to protect and cherish.
-
-It’s been just a short while since our story began, yet I already look forward to each new moment with you.
-
-In so little time you’ve brought a warm, gentle happiness into my life—a sense of excitement about tomorrow and an appreciation for the little joys in every day.
-
-I wonder if you see how much light you bring, not only to my days, but to the way I see the world. You make everything seem brighter just by being you.
-
-On your birthday, I hope you feel surrounded by love—the quiet love that comes from someone who truly admires and cares for you.
-
-I wish you a year filled with new adventures that make you laugh out loud and gentle surprises that remind you how wonderful life can be.
-
-May you find peace in unexpected places, and may your biggest dreams start to take shape before your eyes.
-
-As you step into this new chapter, know that I’m grateful for every page we’ve shared and excited to see where our story leads next.
-
-No matter what this year brings, I hope we can walk through it together, making memories and creating happiness in our own special way.
-
-Happy birthday, Adesuwa. I’m lucky to know you, and I wish you nothing but the sweetest things ahead.
-
-With all my love,
-Robert`;
-
-    // Placeholders for other dates
-    for (let d = startDay; d <= 30; d++) {
-      if (!map[d]) map[d] = `This is your November ${d} letter!`;
-    }
-
-    return map;
-  }, []);
-
+  // We'll load per-day pages (day12.html...day30.html) on demand when opening the envelope.
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null); // Date object
   const [letterRevealed, setLetterRevealed] = useState(false);
+  const [letterHtml, setLetterHtml] = useState("");
+  const [loadingLetter, setLoadingLetter] = useState(false);
+
+  async function fetchLetterForDay(day) {
+    const url = `./day${day}.html`;
+    setLoadingLetter(true);
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to fetch');
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      const content = doc.getElementById('letter-content');
+      setLetterHtml(content ? content.innerHTML : text);
+      setLetterRevealed(true);
+    } catch (err) {
+      setLetterHtml(`<p>Sorry, could not load the letter for Nov ${day}.</p>`);
+      setLetterRevealed(true);
+    } finally {
+      setLoadingLetter(false);
+    }
+  }
 
   useEffect(() => {
     // Reset letter reveal whenever modal or selected date changes
     setLetterRevealed(false);
+    setLetterHtml("");
+    setLoadingLetter(false);
   }, [selectedDate, modalOpen]);
 
   useEffect(() => {
@@ -86,10 +71,14 @@ Robert`;
     setModalOpen(false);
     setSelectedDate(null);
     setLetterRevealed(false);
+    setLetterHtml("");
+    setLoadingLetter(false);
   }
 
   function handleEnvelopeClick() {
-    setLetterRevealed(true);
+    if (!selectedDate) return;
+    const day = selectedDate.getDate();
+    fetchLetterForDay(day);
   }
 
   return (
@@ -145,14 +134,12 @@ Robert`;
                     <span className={styles.envelopeEmoji} aria-hidden>
                       ✉️
                     </span>
-                    <div className={styles.envelopeHint}>Open and read your letter</div>
+                    <div className={styles.envelopeHint}>{loadingLetter ? 'Loading...' : 'Open and read your letter'}</div>
                   </div>
                 </div>
               ) : (
                 <div className={styles.letterBox}>
-                  <pre className={styles.letterText}>
-                    {selectedDate ? messages[selectedDate.getDate()] : "No letter found."}
-                  </pre>
+                  <div className={styles.letterText} dangerouslySetInnerHTML={{ __html: letterHtml || '<p>No letter found.</p>' }} />
                   <div className={styles.letterActions}>
                     <button className={styles.closePrimary} onClick={closeModal}>
                       Close
