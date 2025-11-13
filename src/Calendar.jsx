@@ -24,8 +24,15 @@ export default function Calendar() {
   const [letterRevealed, setLetterRevealed] = useState(false);
   const [letterHtml, setLetterHtml] = useState("");
   const [loadingLetter, setLoadingLetter] = useState(false);
+  const [messagesMap, setMessagesMap] = useState(null);
 
   async function fetchLetterForDay(day) {
+    // If we already have a central messages.json loaded, use it first
+    if (messagesMap && messagesMap[day]) {
+      setLetterHtml(messagesMap[day]);
+      setLetterRevealed(true);
+      return;
+    }
     const url = `./day${day}.html`;
     setLoadingLetter(true);
     try {
@@ -44,6 +51,22 @@ export default function Calendar() {
       setLoadingLetter(false);
     }
   }
+
+  // Load messages.json once (optional central source)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch('./messages.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (mounted) setMessagesMap(json);
+      } catch (e) {
+        // ignore — we'll fall back to dayXX.html files
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     // Reset letter reveal whenever modal or selected date changes

@@ -230,12 +230,13 @@
         return list;
       }, []);
 
-      // we will fetch per-day letter pages (day12.html ... day30.html) when envelope is opened
-      const [modalOpen, setModalOpen] = useState(false);
-      const [selectedDate, setSelectedDate] = useState(null);
-      const [letterRevealed, setLetterRevealed] = useState(false);
-      const [letterHtml, setLetterHtml] = useState("");
-      const [loadingLetter, setLoadingLetter] = useState(false);
+  // we will fetch per-day letter pages (day12.html ... day30.html) when envelope is opened
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [letterRevealed, setLetterRevealed] = useState(false);
+  const [letterHtml, setLetterHtml] = useState("");
+  const [loadingLetter, setLoadingLetter] = useState(false);
+  const [messagesMap, setMessagesMap] = useState(null);
 
       useEffect(() => { setLetterRevealed(false); setLetterHtml(""); setLoadingLetter(false); }, [selectedDate, modalOpen]);
       useEffect(() => { function onKey(e){ if (e.key === 'Escape') setModalOpen(false); } window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, []);
@@ -246,6 +247,14 @@
       async function handleEnvelopeClick(){
         if (!selectedDate) return;
         const day = selectedDate.getDate();
+
+        // If we have a central messages.json loaded, use it
+        if (messagesMap && messagesMap[day]) {
+          setLetterHtml(messagesMap[day]);
+          setLetterRevealed(true);
+          return;
+        }
+
         const url = `./day${day}.html`;
         setLoadingLetter(true);
         try {
@@ -263,6 +272,20 @@
           setLetterRevealed(true);
         } finally { setLoadingLetter(false); }
       }
+
+      // attempt to load centralized messages.json once
+      useEffect(()=>{
+        let mounted = true;
+        (async ()=>{
+          try{
+            const r = await fetch('./messages.json',{cache:'no-store'});
+            if(!r.ok) return;
+            const j = await r.json();
+            if(mounted) setMessagesMap(j);
+          }catch(e){}
+        })();
+        return ()=>{ mounted=false; };
+      },[]);
 
       return (
         <div className="container">
