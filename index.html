@@ -13,48 +13,56 @@
   <link rel="stylesheet" href="styles.css" />
   <!-- Calendar component styles (embedded for CDN/demo integration) -->
   <style>
-  /* Basic mobile-friendly styles for the Calendar component */
+  /* Improved, friendlier UI for the calendar + envelope modal */
   .container {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    max-width: 960px;
+    margin: 10px auto;
+    padding: 18px;
+    font-family: "Quicksand", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     color: #3a2140;
   }
 
-  .header { text-align: center; margin-bottom: 12px; }
-  .header h1 { margin: 0; font-size: 1.6rem; letter-spacing: -0.5px; }
-  .sub { margin: 6px 0 0 0; color: #6c4b66; font-size: 0.95rem; }
+  .header { text-align: left; margin: 6px 0 18px 8px; }
+  .header h1 { margin: 0; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #4a2a47; }
+  .sub { margin: 6px 0 0 8px; color: #7a5a73; font-size: 0.98rem; }
 
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  @media (max-width: 640px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 420px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: stretch; }
+  @media (max-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .card { background: linear-gradient(180deg, #fff, #fffaf8); border-radius: 12px; border: 1px solid rgba(58,33,64,0.06); padding: 10px; cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease; display: flex; align-items: center; justify-content: center; min-height: 72px; }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(58,33,64,0.07); }
-  .today { box-shadow: 0 8px 24px rgba(249,164,200,0.12); border: 1px solid rgba(249,164,200,0.28); }
+  .card { background: linear-gradient(180deg, #ffffff, #fff9fb); border-radius: 14px; border: 1px solid rgba(74,42,71,0.06); padding: 12px; cursor: pointer; transition: transform 200ms cubic-bezier(.2,.9,.3,1), box-shadow 200ms ease; display: flex; align-items: center; justify-content: center; min-height: 84px; box-shadow: 0 6px 20px rgba(58,33,64,0.04); text-decoration: none; color: inherit; }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(58,33,64,0.08); }
   .cardInner { text-align: center; }
-  .day { font-size: 1.3rem; font-weight: 700; }
-  .label { font-size: 0.75rem; color: #7a5a73; }
+  .day { font-size: 1.4rem; font-weight: 800; color: #3a2140; }
+  .label { font-size: 0.75rem; color: #9a7b92; margin-top: 4px; }
 
-  /* Modal */
-  .modalOverlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(10, 6, 10, 0.45); z-index: 9999; padding: 20px; }
-  .modal { width: min(560px, 96%); background: white; border-radius: 12px; box-shadow: 0 24px 60px rgba(10,6,10,0.35); position: relative; overflow: hidden; }
-  .closeBtn { position: absolute; right: 10px; top: 6px; background: transparent; border: none; font-size: 22px; cursor: pointer; color: #7a5a73; }
-  .modalContent { padding: 20px; text-align: center; }
-  .modalTitle { margin: 8px 0 16px 0; font-size: 1.25rem; color: #3a2140; }
+  /* Modal overlay and card modal */
+  .modalOverlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, rgba(10,6,10,0.32), rgba(10,6,10,0.5)); z-index: 9999; padding: 24px; backdrop-filter: blur(4px); }
+  .modal { width: min(640px, 98%); background: linear-gradient(180deg,#fff,#fffaf6); border-radius: 14px; box-shadow: 0 30px 80px rgba(10,6,10,0.32); position: relative; overflow: visible; }
+  .closeBtn { position: absolute; right: 12px; top: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer; color: #7a5a73; }
+  .modalContent { padding: 22px; text-align: center; }
+  .modalTitle { margin: 6px 0 18px 0; font-size: 1.3rem; color: #3a2140; font-weight: 700; }
 
-  .envelopeWrap { display:flex; align-items:center; justify-content:center; padding: 24px 8px 32px 8px; }
-  .envelope { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 22px; background: linear-gradient(180deg,#fff6f8,#fff1f5); border-radius: 12px; border: 1px solid rgba(58,33,64,0.05); min-width: 160px; min-height: 110px; cursor: pointer; user-select: none; transition: transform 200ms cubic-bezier(.2,.9,.3,1); }
-  .envelope:active { transform: translateY(4px) scale(0.99); }
-  .envelopeEmoji { font-size: 42px; display:block; animation: float 2.4s ease-in-out infinite; }
-  @keyframes float { 0% { transform: translateY(0) } 50% { transform: translateY(-8px) } 100% { transform: translateY(0) } }
-  .envelopeHint { font-size: 0.95rem; color: #6c4b66; }
+  /* Envelope visual */
+  .envelopeWrap { display:flex; align-items:center; justify-content:center; padding: 12px 8px 28px 8px; }
+  .envelope { position: relative; width: 320px; max-width: 86%; min-height: 160px; background: linear-gradient(180deg,#fff7fb,#fff2f6); border-radius: 12px; border: 1px solid rgba(74,42,71,0.06); box-shadow: 0 12px 30px rgba(74,42,71,0.06); cursor: pointer; transition: transform 260ms cubic-bezier(.2,.9,.3,1); display:flex; align-items:center; justify-content:center; }
+  /* flap element so GSAP can animate it */
+  .envelope .flap { position: absolute; left: 0; right: 0; top: 0; height: 54%; background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,230,240,0.9)); clip-path: polygon(0 0, 50% 78%, 100% 0); border-top-left-radius: 12px; border-top-right-radius: 12px; transform-origin: 50% 0; pointer-events: none; }
+  /* seal element */
+  .envelope .seal { position: absolute; left: 50%; top: 44%; transform: translate(-50%,-50%); background: linear-gradient(135deg,#ffd6e6,#ffb8d0); color:#6a334a; width:48px; height:48px; display:flex; align-items:center; justify-content:center; border-radius:50%; box-shadow: inset 0 1px 6px rgba(255,255,255,0.6), 0 8px 18px rgba(106,51,74,0.12); font-weight:700; pointer-events: none; }
 
-  .letterBox { padding: 14px 18px 22px 18px; }
-  .letterText { white-space: pre-wrap; text-align: left; color: #3a2140; font-size: 0.95rem; line-height: 1.6; background: #fffaf6; border-radius: 8px; padding: 12px; border: 1px solid rgba(58,33,64,0.03); min-height: 120px; }
+  .envelope .envelopeEmoji { font-size: 46px; display:block; opacity:0.95; transform: translateY(0); transition: transform 260ms ease, opacity 200ms ease; }
+  .envelopeHint { margin-top: 8px; color: #7a5a73; font-size: 0.95rem; }
+
+  .letterBox { padding: 14px 18px 18px 18px; width: calc(100% - 36px); box-sizing: border-box; position: absolute; left: 50%; transform: translateX(-50%) translateY(18px); bottom: -8px; opacity: 0; pointer-events: none; transition: transform 360ms cubic-bezier(.2,.9,.3,1), opacity 260ms ease; background: linear-gradient(180deg,#fffdfb,#fff6f1); border-radius: 10px; border: 1px solid rgba(74,42,71,0.04); box-shadow: 0 14px 40px rgba(10,6,10,0.06); }
+  .letterText { white-space: pre-wrap; text-align: left; color: #3a2140; font-size: 0.98rem; line-height: 1.6; }
   .letterActions { display:flex; justify-content:center; margin-top: 12px; }
-  .closePrimary { background: linear-gradient(180deg,#ffdfe9,#ffcee4); border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; color: #3a2140; font-weight: 600; }
+
+  /* when open */
+  .envelope.open { transform: translateY(-8px) scale(1.01); }
+  .envelope.open .flap { transform: translateY(-8px) rotateX(16deg); transform-origin: 50% 0; }
+  .envelope.open .letterBox { transform: translateX(-50%) translateY(-12px); opacity: 1; pointer-events: auto; }
+  .envelope.open .envelopeEmoji { transform: translateY(-8px) scale(0.9); opacity: 0.9; }
   </style>
   </head>
   <body>
@@ -64,138 +72,305 @@
       <section style="width:100%;max-width:980px;margin:32px auto;padding:16px;">
         <h1 style="margin:0 0 8px 0;font-family: 'Playfair Display', serif;">November Calendar</h1>
         <p style="margin:0 0 18px 0;color:#6c4b66;">Tap a date to open its letter</p>
-        <section id="calendar-root" class="react-calendar-root" aria-label="Calendar component"></section>
+        <section id="calendar-root" class="react-calendar-root" aria-label="Calendar component">
+          <!-- Non-JS fallback grid: this will be replaced by the React calendar when scripts run. -->
+          <div class="container" aria-hidden="false">
+            <header class="header"><h1>November</h1><p class="sub">Tap a date to open its letter</p></header>
+            <div class="grid">
+              <!-- Static links to per-day pages so the calendar is visible without JS -->
+              <!-- Generated days 12..30 -->
+              <a class="card" href="./day12.html"><div class="cardInner"><div class="day">12</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day13.html"><div class="cardInner"><div class="day">13</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day14.html"><div class="cardInner"><div class="day">14</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day15.html"><div class="cardInner"><div class="day">15</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day16.html"><div class="cardInner"><div class="day">16</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day17.html"><div class="cardInner"><div class="day">17</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day18.html"><div class="cardInner"><div class="day">18</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day19.html"><div class="cardInner"><div class="day">19</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day20.html"><div class="cardInner"><div class="day">20</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day21.html"><div class="cardInner"><div class="day">21</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day22.html"><div class="cardInner"><div class="day">22</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day23.html"><div class="cardInner"><div class="day">23</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day24.html"><div class="cardInner"><div class="day">24</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day25.html"><div class="cardInner"><div class="day">25</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day26.html"><div class="cardInner"><div class="day">26</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day27.html"><div class="cardInner"><div class="day">27</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day28.html"><div class="cardInner"><div class="day">28</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day29.html"><div class="cardInner"><div class="day">29</div><div class="label">Nov</div></div></a>
+              <a class="card" href="./day30.html"><div class="cardInner"><div class="day">30</div><div class="label">Nov</div></div></a>
+            </div>
+            <noscript style="display:block;text-align:center;margin-top:12px;color:#6c4b66;">JavaScript is disabled — click a date to open its letter page.</noscript>
+          </div>
+        </section>
       </section>
     </main>
 
-    <!-- React (CDN) + Babel for demo integration -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Embedded messages (used by vanilla fallback when offline) -->
+    <script id="embedded-messages" type="application/json">
+    {
+      "12": "<p>Picture a quiet garden just after dawn, when the world is peaceful and each flower slowly opens to meet the sunlight.</p><p>That’s how these last few weeks with you have felt—calm, full of promise, and touched by gentle wonder.</p><p>Every time I get to hear your voice or see your smile, it feels like finding a new blossom, something delicate and beautiful I want to protect and cherish.</p><p>It’s been just a short while since our story began, yet I already look forward to each new moment with you.</p><p>In so little time you’ve brought a warm, gentle happiness into my life—a sense of excitement about tomorrow and an appreciation for the little joys in every day.</p><p>I wonder if you see how much light you bring, not only to my days, but to the way I see the world. You make everything seem brighter just by being you.</p><p>On your birthday, I hope you feel surrounded by love—the quiet love that comes from someone who truly admires and cares for you.</p><p>I wish you a year filled with new adventures that make you laugh out loud and gentle surprises that remind you how wonderful life can be.</p><p>May you find peace in unexpected places, and may your biggest dreams start to take shape before your eyes.</p><p>As you step into this new chapter, know that I’m grateful for every page we’ve shared and excited to see where our story leads next.</p><p>No matter what this year brings, I hope we can walk through it together, making memories and creating happiness in our own special way.</p><p>Happy birthday, Adesuwa. I’m lucky to know you, and I wish you nothing but the sweetest things ahead.</p><p>With all my love,<br/>Robert</p>",
+      "13": "<p>This is your November 13 letter!</p>",
+      "14": "<p>This is your November 14 letter!</p>",
+      "15": "<p>This is your November 15 letter!</p>",
+      "16": "<p>This is your November 16 letter!</p>",
+      "17": "<p>This is your November 17 letter!</p>",
+      "18": "<p>This is your November 18 letter!</p>",
+      "19": "<p>This is your November 19 letter!</p>",
+      "20": "<p>This is your November 20 letter!</p>",
+      "21": "<p>This is your November 21 letter!</p>",
+      "22": "<p>This is your November 22 letter!</p>",
+      "23": "<p>This is your November 23 letter!</p>",
+      "24": "<p>This is your November 24 letter!</p>",
+      "25": "<p>This is your November 25 letter!</p>",
+      "26": "<p>This is your November 26 letter!</p>",
+      "27": "<p>This is your November 27 letter!</p>",
+      "28": "<p>This is your November 28 letter!</p>",
+      "29": "<p>This is your November 29 letter!</p>",
+      "30": "<p>This is your November 30 letter!</p>"
+    }
+    </script>
 
-    <script type="text/babel">
-    const { useState, useMemo, useEffect } = React;
+    <!-- Vanilla fallback: intercept static date links and show envelope modal using embedded messages (works offline) -->
+    <script>
+    (function(){
+      function $(sel, root=document){ return root.querySelector(sel); }
+      function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
 
-    function Calendar() {
-      // Fixed range: November 12 - 30, 2025
-      const year = 2025;
-      const novemberMonth = 10; // November (0-based)
-      const startDay = 12;
+      const embedded = document.getElementById('embedded-messages');
+      let messages = {};
+      try{ messages = embedded ? JSON.parse(embedded.textContent) : {}; }catch(e){ messages = {}; }
 
-      const days = useMemo(() => {
-        const list = [];
-        for (let d = startDay; d <= 30; d++) list.push(new Date(year, novemberMonth, d));
-        return list;
-      }, []);
+      document.addEventListener('click', function(e){
+        // only handle clicks on the static cards (anchors inside #calendar-root)
+        const a = e.target.closest && e.target.closest('#calendar-root .grid a.card');
+        if(!a) return;
+        e.preventDefault();
+        const dayEl = a.querySelector('.day');
+        const day = dayEl ? dayEl.textContent.trim() : (a.getAttribute('href')||'').match(/day(\d+)/)?.[1];
+        if(!day) return;
+        openVanillaModal(day);
+      });
 
-  // we will fetch per-day letter pages (day12.html ... day30.html) when envelope is opened
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [letterRevealed, setLetterRevealed] = useState(false);
-  const [letterHtml, setLetterHtml] = useState("");
-  const [loadingLetter, setLoadingLetter] = useState(false);
-  const [messagesMap, setMessagesMap] = useState(null);
-
-      useEffect(() => { setLetterRevealed(false); setLetterHtml(""); setLoadingLetter(false); }, [selectedDate, modalOpen]);
-      useEffect(() => { function onKey(e){ if (e.key === 'Escape') setModalOpen(false); } window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, []);
-
-      function openForDate(dateObj){ setSelectedDate(dateObj); setModalOpen(true); }
-      function closeModal(){ setModalOpen(false); setSelectedDate(null); setLetterRevealed(false); setLetterHtml(""); setLoadingLetter(false); }
-
-      async function handleEnvelopeClick(){
-        if (!selectedDate) return;
-        const day = selectedDate.getDate();
-
-        // If we have a central messages.json loaded, use it
-        if (messagesMap && messagesMap[day]) {
-          setLetterHtml(messagesMap[day]);
-          setLetterRevealed(true);
-          return;
+      function openVanillaModal(day){
+        // create overlay if missing
+        let overlay = document.querySelector('.vanilla-modal-overlay');
+        if(!overlay){
+          overlay = document.createElement('div');
+          overlay.className = 'modalOverlay vanilla-modal-overlay';
+          overlay.innerHTML = `
+            <div class="modal">
+              <button class="closeBtn" aria-label="Close">×</button>
+              <div class="modalContent">
+                <h2 class="modalTitle"></h2>
+                <div class="envelopeWrap">
+                  <div class="envelope" role="button" tabindex="0">
+                    <span class="envelopeEmoji" aria-hidden>✉️</span>
+                    <div class="envelopeHint">Tap to open</div>
+                    <div class="letterBox"><div class="letterText"></div><div class="letterActions"><button class="closePrimary">Close</button></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          document.body.appendChild(overlay);
+          overlay.querySelector('.closeBtn').addEventListener('click', ()=> overlay.remove());
+          overlay.querySelector('.closePrimary').addEventListener('click', ()=> overlay.remove());
+          const envelope = overlay.querySelector('.envelope');
+          envelope.addEventListener('click', ()=> envelope.classList.toggle('open'));
+          envelope.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter') envelope.classList.toggle('open'); });
         }
+        overlay.querySelector('.modalTitle').textContent = `November ${day}`;
+        const letterText = overlay.querySelector('.letterText');
+        letterText.innerHTML = messages[day] || '<p>Sorry, could not load the letter.</p>';
+        overlay.querySelector('.envelope').classList.remove('open');
+      }
+    })();
+    </script>
 
-        const url = `./day${day}.html`;
-        setLoadingLetter(true);
-        try {
-          const res = await fetch(url, {cache: 'no-store'});
-          if (!res.ok) throw new Error('Failed to load');
-          const text = await res.text();
-          // extract #letter-content innerHTML
+    <!-- React demo removed — page now uses lightweight GSAP + vanilla JS for modal/envelope behavior -->
+
+    <!-- Vanilla fallback: open day pages inside the envelope modal when static links are clicked -->
+    <script>
+    (function(){
+      let messagesCache = null;
+
+      async function loadMessages(){
+        if (messagesCache) return messagesCache;
+        try{
+          const r = await fetch('./messages.json', {cache: 'no-store'});
+          if (!r.ok) return null;
+          messagesCache = await r.json();
+          return messagesCache;
+        }catch(e){ return null; }
+      }
+
+      async function fetchDayHtml(day){
+        try{
+          const r = await fetch(`./day${day}.html`, {cache: 'no-store'});
+          if (!r.ok) throw new Error('not found');
+          const text = await r.text();
           const parser = new DOMParser();
           const doc = parser.parseFromString(text, 'text/html');
           const content = doc.getElementById('letter-content');
-          setLetterHtml(content ? content.innerHTML : text);
-          setLetterRevealed(true);
-        } catch (err) {
-          setLetterHtml('<p>Sorry, could not load the letter.</p>');
-          setLetterRevealed(true);
-        } finally { setLoadingLetter(false); }
+          return content ? content.innerHTML : text;
+        }catch(e){ return `<p>Sorry, could not load the letter for Nov ${day}.</p>`; }
       }
 
-      // attempt to load centralized messages.json once
-      useEffect(()=>{
-        let mounted = true;
-        (async ()=>{
-          try{
-            const r = await fetch('./messages.json',{cache:'no-store'});
-            if(!r.ok) return;
-            const j = await r.json();
-            if(mounted) setMessagesMap(j);
-          }catch(e){}
-        })();
-        return ()=>{ mounted=false; };
-      },[]);
-
-      return (
-        <div className="container">
-          <header className="header"><h1>November</h1><p className="sub">Tap a date to open its letter</p></header>
-          <div className="grid">
-            {days.map((dt)=>{
-              const day = dt.getDate();
-              return (
-                <button key={day} className={`card`} onClick={()=>openForDate(dt)} aria-label={`Open letter for November ${day}`}>
-                  <div className="cardInner"><div className="day">{day}</div><div className="label">Nov</div></div>
-                </button>
-              );
-            })}
-          </div>
-
-          {modalOpen && (
-            <div className="modalOverlay" role="dialog" aria-modal="true">
-              <div className="modal">
-                <button className="closeBtn" onClick={closeModal} aria-label="Close">×</button>
-                <div className="modalContent">
-                  <h2 className="modalTitle">{selectedDate ? `November ${selectedDate.getDate()}` : 'Letter'}</h2>
-                  {!letterRevealed ? (
-                    <div className="envelopeWrap">
-                      <div className="envelope" role="button" tabIndex={0} onClick={handleEnvelopeClick} onKeyDown={(e)=>e.key==='Enter'&&handleEnvelopeClick()} aria-label="Open and read your letter">
-                        <span className="envelopeEmoji" aria-hidden>✉️</span>
-                        <div className="envelopeHint">{loadingLetter ? 'Loading...' : 'Open and read your letter'}</div>
+      function createModal(day){
+        const overlay = document.createElement('div');
+        overlay.className = 'modalOverlay';
+        overlay.innerHTML = `
+          <div class="modal" role="dialog" aria-modal="true">
+            <button class="closeBtn" aria-label="Close">×</button>
+            <div class="modalContent">
+              <h2 class="modalTitle">November ${day}</h2>
+              <div class="envelopeWrap">
+                      <div class="envelope" role="button" tabindex="0">
+                        <div class="flap" aria-hidden></div>
+                        <div class="seal" aria-hidden>❤</div>
+                        <span class="envelopeEmoji" aria-hidden>✉️</span>
+                        <div class="envelopeHint">Open and read your letter</div>
+                        <div class="letterBox" style="display:block;">
+                          <div class="letterText">Loading…</div>
+                          <div class="letterActions"><button class="closePrimary">Close</button></div>
+                        </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="letterBox">
-                      <div className="letterText" dangerouslySetInnerHTML={{__html: letterHtml || '<p>No letter found.</p>'}} />
-                      <div className="letterActions"><button className="closePrimary" onClick={closeModal}>Close</button></div>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
-          )}
-        </div>
-      );
-    }
+          </div>
+        `;
 
-    document.addEventListener('DOMContentLoaded', function(){
-      const root = document.getElementById('calendar-root');
-      if (root) ReactDOM.createRoot(root).render(<Calendar />);
-    });
+        // close handlers
+        overlay.querySelector('.closeBtn').addEventListener('click', ()=> overlay.remove());
+        overlay.querySelector('.closePrimary').addEventListener('click', ()=> overlay.remove());
+        overlay.addEventListener('click', (e)=>{ if (e.target === overlay) overlay.remove(); });
+        document.addEventListener('keydown', function esc(e){ if (e.key === 'Escape'){ overlay.remove(); document.removeEventListener('keydown', esc); } });
 
+        const envelope = overlay.querySelector('.envelope');
+        const hint = overlay.querySelector('.envelopeHint');
+        const letterText = overlay.querySelector('.letterText');
+
+        let loaded = false;
+        // When envelope clicked, reveal and load content (if needed)
+        envelope.addEventListener('click', async function(){
+          if (!loaded){
+            hint.textContent = 'Loading...';
+            const msgs = await loadMessages();
+            if (msgs && msgs[day]){
+              letterText.innerHTML = msgs[day];
+            } else {
+              letterText.innerHTML = await fetchDayHtml(day);
+            }
+            loaded = true;
+            hint.textContent = 'Tap to close';
+            envelope.classList.add('open');
+          } else {
+            // toggle close
+            envelope.classList.toggle('open');
+            hint.textContent = envelope.classList.contains('open') ? 'Tap to close' : 'Open and read your letter';
+          }
+        });
+
+        return overlay;
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        const root = document.getElementById('calendar-root');
+        if (!root) return;
+
+        // Delegate clicks on static <a class="card"> links inside the fallback grid
+        root.addEventListener('click', function(e){
+          const a = e.target.closest('a.card');
+          if (!a) return;
+          // If React replaced the content, these anchors won't exist; if they do, intercept
+          e.preventDefault();
+          const href = a.getAttribute('href') || '';
+          const m = href.match(/day(\d+)\.html$/);
+          if (!m) return window.location.href = href;
+          const day = m[1];
+          const modal = createModal(day);
+          document.body.appendChild(modal);
+        });
+      });
+    })();
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+    // Initialize GSAP behavior for envelopes and modal interactions
+    (function(){
+      if (!window.gsap) return;
+      // helper to attach animations to an envelope element inside an overlay
+      function attachAnimation(envelope){
+        if (!envelope) return;
+        if (envelope._gsapAttached) return;
+        envelope._gsapAttached = true;
+        const flap = envelope.querySelector('.flap');
+        const letterBox = envelope.querySelector('.letterBox');
+        const seal = envelope.querySelector('.seal');
+        let tl = null;
+        function buildTimeline(){
+          // register TextPlugin if available (script.js registers it too, but double-safe here)
+          try{ if (window.TextPlugin && window.gsap && typeof window.gsap.registerPlugin === 'function') window.gsap.registerPlugin(window.TextPlugin); }catch(e){}
+          tl = gsap.timeline({paused:true});
+          tl.to(envelope, {y:-10, scale:1.01, duration:0.28, ease: 'power1.out'}, 0);
+          if (flap) tl.to(flap, {rotationX:-140, transformOrigin:'50% 0%', duration:0.5, ease:'back.out(0.6)'}, 0.05);
+          if (letterBox) tl.to(letterBox, {y:-18, opacity:1, pointerEvents:'auto', duration:0.36, ease:'power1.out'}, 0.12);
+          // Typing (handwriting) reveal per paragraph using TextPlugin if available
+          const paras = Array.from(envelope.querySelectorAll('.letterText p'));
+          if (paras && paras.length){
+            let startPos = 0.25;
+            paras.forEach((p)=>{
+              const full = p.textContent.trim();
+              // clear visible text before typing
+              try{ p.textContent = ''; }catch(e){}
+              const dur = Math.max(0.6, Math.min(8, (full.length || 20) * 0.04));
+              if (gsap && gsap.core && gsap.core.globals && window.TextPlugin){
+                tl.to(p, {text: full, duration: dur, ease: 'none'}, startPos);
+              } else {
+                // fallback: simple fade-in
+                tl.fromTo(p, {y:10, opacity:0}, {y:0, opacity:1, duration: Math.min(0.6, dur)}, startPos);
+              }
+              startPos += dur + 0.08;
+            });
+          }
+        }
+
+        envelope.addEventListener('click', async function(ev){
+          // if content not loaded, wait for it (some flows load on first click)
+          if (!letterBox) return;
+          // build timeline lazily
+          if (!tl) buildTimeline();
+          const isOpen = envelope.classList.contains('open');
+          if (!isOpen){
+            envelope.classList.add('open');
+            tl.play();
+          } else {
+            // reverse
+            tl.reverse().then(()=>{
+              envelope.classList.remove('open');
+            });
+          }
+        });
+      }
+
+      // Observe the DOM for overlays (created by vanilla fallback) and attach GSAP
+      const obs = new MutationObserver((records)=>{
+        for(const r of records){
+          for(const n of r.addedNodes){
+            if (!(n instanceof HTMLElement)) continue;
+            const env = n.querySelector && n.querySelector('.envelope');
+            if (env) attachAnimation(env);
+          }
+        }
+      });
+      obs.observe(document.body, {childList:true, subtree:true});
+
+      // Also attach to any existing envelope nodes (in case modal already present)
+      document.querySelectorAll('.envelope').forEach(attachAnimation);
+    })();
+    </script>
     <script src="script.js"></script>
   </body>
 </html>
